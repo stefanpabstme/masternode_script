@@ -1,4 +1,5 @@
 #!/bin/bash 
+clear
 read -p "This script will install some useful dependencies and the masternodes of your choice. You've to run this as root! [ENTER]"
 
 
@@ -57,11 +58,8 @@ fi
 
 if [ "$wage" = "y" ]; then
   echo "Installing wage.."
-  git clone https://github.com/damiensgit/vps.git && cd vps
-  ./install.sh -p digiwage
-  read -p "Next you've to add your masternodeprivkey and it save [ENTER]"
-  nano /etc/masternodes/digiwage_n1.conf
-  /usr/local/bin/activate_masternodes_digiwage
+  wget https://raw.githubusercontent.com/digiwage/digiwage_install/master/digiwage_install.sh
+  bash digiwage_install.sh
 fi
 
 if [ "$rupx" = "y" ]; then
