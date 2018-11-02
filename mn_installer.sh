@@ -1,29 +1,44 @@
 #!/bin/bash
 clear
-read -p "This script will install some useful dependencies and the masternodes of your choice. You've to run this as root! [ENTER]\n"
+read -p "This script will install some useful dependencies and the masternodes of your choice. You've to run this as root! [ENTER]"
+echo ""
 
 
-apt-get install nano htop git realpath
+apt-get install -y nano htop git realpath
 
 
 read -r -p "Install smartcash? [y/n] " smart
+echo ""
 read -r -p "Install anonymousbitcoin? [y/n] " anon
+echo ""
 read -r -p "Install socialsend? [y/n] " send
+echo ""
 read -r -p "Install hempcoin? [y/n] " thc
+echo ""
 read -r -p "Install magnacoin? [y/n] " mgn
+echo ""
 read -r -p "Install pure? [y/n] " pure
+echo ""
 read -r -p "Install digiwage? [y/n] " wage
+echo ""
 read -r -p "Install rupaya? [y/n] " rupx
+echo ""
 read -r -p "Install syndicate? [y/n] " synx
+echo ""
 read -r -p "Install travelpay? [y/n] " trp
+echo ""
 #read -r -p "Install veruscoin cpu miner? [y/n] " vrsc
+echo ""
 #read -r -p "Install komodo cpu miner? [y/n] " kmd
-#read -r -p "Install monero cpu miner? [y/n] " vrsc
-echo "\n\n"
+echo ""
+#read -r -p "Install monero cpu miner? [y/n] " xmr
+echo ""
+echo ""
 
 if [ "$smart" = "y" ]; then
   coin="Smartcash"
-  read -p "Installing $coin.. [ENTER]\n"
+  read -p "Installing $coin.. [ENTER]"
+  echo ""
   cd
   wget https://rawgit.com/smartcash/smartnode/master/install.sh
   bash ./install.sh
@@ -32,7 +47,8 @@ fi
 
 if [ "$anon" = "y" ]; then
   coin="Anonymous Bitcoin"
-  read -p "Installing $coin.. [ENTER]\n"
+  read -p "Installing $coin.. [ENTER]"
+  echo ""
   cd
   wget https://raw.githubusercontent.com/alttankcanada/ANONMasternodeScript/master/anon_mnsetup_install.sh
   bash ./anon_mnsetup_install.sh
@@ -41,7 +57,8 @@ fi
 
 if [ "$send" = "y" ]; then
   coin="SocialSend"
-  read -p "Installing $coin.. [ENTER]\n"
+  read -p "Installing $coin.. [ENTER]"
+  echo ""
   cd
   git clone https://github.com/SocialSend/easy_masternode.git
   cd easy_masternode
@@ -51,7 +68,8 @@ fi
 
 if [ "$thc" = "y" ]; then
   coin="Hempcoin"
-  read -p "Installing $coin.. [ENTER]\n"
+  read -p "Installing $coin.. [ENTER]"
+  echo ""
   cd
   wget https://raw.githubusercontent.com/hempcoin-project/mnscript/master/hempcoin_install.sh
   bash hempcoin_install.sh
@@ -60,7 +78,8 @@ fi
 
 if [ "$mgn" = "y" ]; then
   coin="MagnaCoin"
-  read -p "Installing $coin.. [ENTER]\n"
+  read -p "Installing $coin.. [ENTER]"
+  echo ""
   echo "Type the rpcuser that you want to use, followed by [ENTER]:"
   read rpcuser
   echo "Type the rpcpassword that you want to use, followed by [ENTER]:"
@@ -106,27 +125,32 @@ if [ "$mgn" = "y" ]; then
   sleep 30
   ./mgn-1.0.0/bin/mgn-cli getinfo
   echo "\n"
-  echo "$coin installation completed\n"
-  read -p "$str\nCopy this and create your masternode.conf file. [ENTER]"
+  echo "$coin installation completed"
+  echo ""
+  echo "$str"
+  read -p "Copy this and create your masternode.conf file. [ENTER]"
 fi
 
 if [ "$synx" = "y" ]; then
   coin="Syndicate"
-  read -p "Installing $coin.. [ENTER]\n"
+  read -p "Installing $coin.. [ENTER]"
+  echo ""
   https://github.com/SyndicateLtd/SyndicateQT/releases/download/v2.0.0/Syndicate-2.0.0-aarch64-linux-gnu.tar
 
 fi
 
 if [ "$pure" = "y" ]; then
   coin="PURE"
-  read -p "Installing $coin.. [ENTER]\n"
+  read -p "Installing $coin.. [ENTER]"
+  echo ""
   wget https://github.com/puredev321/pure-v2/releases/download/v2.0.0.0/pure-v2-v2.0.0.0-linux64.tar.gz
 
 fi
 
 if [ "$wage" = "y" ]; then
   coin="Digiwage"
-  read -p "Installing $coin.. [ENTER]\n"
+  read -p "Installing $coin.. [ENTER]"
+  echo ""
   wget https://raw.githubusercontent.com/digiwage/digiwage_install/master/digiwage_install.sh
   bash digiwage_install.sh
   rm -f digiwage_install.sh
@@ -134,7 +158,8 @@ fi
 
 if [ "$rupx" = "y" ]; then
   coin="Rupaya"
-  read -p "Installing $coin.. [ENTER]\n"
+  read -p "Installing $coin.. [ENTER]"
+  echo ""
   wget -q https://raw.githubusercontent.com/rupaya-project/mnscript/master/rupaya_install.sh
   bash rupaya_install.sh
   rm -f rupaya_install.sh
