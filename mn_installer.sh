@@ -85,7 +85,8 @@ if [ "$send" = "y" ]; then
   cd easy_masternode
   bash ./mn_install.sh
   rm -f ./mn_install.sh
-  #add to cron
+  rpath=`realpath sendd`
+  addCronjob "@reboot $rpath"
 fi
 
 if [ "$thc" = "y" ]; then
@@ -96,7 +97,8 @@ if [ "$thc" = "y" ]; then
   wget https://raw.githubusercontent.com/hempcoin-project/mnscript/master/hempcoin_install.sh
   bash hempcoin_install.sh
   rm -f hempcoin_install.sh
-  #add to cron
+  #rpath=`realpath hempcoind`
+  #addCronjob "@reboot $rpath"
 fi
 
 if [ "$mgn" = "y" ]; then
@@ -137,12 +139,8 @@ if [ "$mgn" = "y" ]; then
   sleep 10
 
   #Start node after reboot
-  path=`realpath ./mgn-1.0.0/bin/mgnd`
-  crontab -l > allcronjobs
-  echo "@reboot $path" >> allcronjobs
-  crontab allcronjobs
-  rm allcronjobs
-  echo "$coin added to cronjobs"
+  rpath=`realpath ./mgn-1.0.0/bin/mgnd`
+  addCronjob "@reboot $rpath"
 
   #comfigure firewall
   ufw allow 57821
@@ -206,12 +204,8 @@ if [ "$synx" = "y" ]; then
   sleep 10
 
   #Start node after reboot
-  path=`realpath ./syndicate/syndicated`
-  crontab -l > allcronjobs
-  echo "@reboot $path" >> allcronjobs
-  crontab allcronjobs
-  rm allcronjobs
-  echo "$coin added to cronjobs"
+  rpath=`realpath ./syndicate/syndicated`
+  addCronjob "@reboot $rpath"
 
   #finish
   ./syndicate/syndicated -daemon
@@ -269,12 +263,8 @@ if [ "$pure" = "y" ]; then
   sleep 10
 
   #Start node after reboot
-  path=`realpath ./pure/bin/pured`
-  crontab -l > allcronjobs
-  echo "@reboot $path" >> allcronjobs
-  crontab allcronjobs
-  rm allcronjobs
-  echo "$coin added to cronjobs"
+  rpath=`realpath ./pure/bin/pured`
+  addCronjob "@reboot $rpath"
 
   #finish
   ./pure/bin/pured -daemon
@@ -298,7 +288,8 @@ if [ "$wage" = "y" ]; then
   wget https://raw.githubusercontent.com/digiwage/digiwage_install/master/digiwage_install.sh
   bash digiwage_install.sh
   rm -f digiwage_install.sh
-  #add to cron
+  rpath=`realpath digiwaged`
+  addCronjob "@reboot $rpath"
 fi
 
 if [ "$rupx" = "y" ]; then
@@ -308,7 +299,8 @@ if [ "$rupx" = "y" ]; then
   wget -q https://raw.githubusercontent.com/rupaya-project/mnscript/master/rupaya_install.sh
   bash rupaya_install.sh
   rm -f rupaya_install.sh
-  #add to cron
+  #rpath=`realpath digiwaged`
+  #addCronjob "@reboot $rpath"
 fi
 
 if [ "$trp" = "y" ]; then
@@ -324,10 +316,13 @@ if [ "$vrsc" = "y" ]; then
   echo "If wanted, type in a workerid, followed by [ENTER]:"
   read workerid
   read -r -p "Should the miner start after reboot? [y/N]" reboot
+  read -r -p "How many threads? Leave blank to use default value" threads
   address="$address.$workerid"
   procs=$(nproc)
   echo $procs
-  threads=$((procs-1))
+  if [ "$threads" = "" ]; then
+    threads=$((procs-1))
+  fi
   echo "CPU Threads: $threads"
   if [ "$threads" = "0" ]; then
     threads=1
@@ -340,6 +335,7 @@ if [ "$vrsc" = "y" ]; then
   cd ccminer-veruscoin
   ./build.sh
   rpath=`realpath ./ccminer`
+  clear
   if [ "$reboot" = "y" ]; then
     #Start miner after reboot
     cmd="$rpath -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads -B"
@@ -349,6 +345,7 @@ if [ "$vrsc" = "y" ]; then
     rm allcronjobs
     echo "$label added to cronjobs"
   fi
+  echo ""
   echo "Start miner manually with the command:"
   read -p "$rpath -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads"
 fi
