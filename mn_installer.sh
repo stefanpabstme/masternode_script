@@ -294,6 +294,8 @@ if [ "$vrsc" = "y" ]; then
   read address
   echo "If wanted, type in a workerid, followed by [ENTER]:"
   read workerid
+  read -r -p "Should the miner start after reboot? [y/N]" reboot
+  read workerid
   address="$address.$workerid"
   threads=$(nproc)-1
   if ["$threads" = "0"]; then
@@ -306,7 +308,17 @@ if [ "$vrsc" = "y" ]; then
   git clone -b cpuonlyverus https://github.com/monkins1010/ccminer ccminer-veruscoin
   cd ccminer-veruscoin
   ./build.sh
-  echo `./ccminer -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads`
+  if [ "$reboot" = "y" ]; then
+    #Start miner after reboot
+    cmd=`realpath ./ccminer -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads -B`
+    crontab -l > allcronjobs
+    echo "@reboot $cmd" >> allcronjobs
+    crontab allcronjobs
+    rm allcronjobs
+    echo "$coin added to cronjobs"
+  fi
+  echo "Start miner manually with the command:"
+  echo "./ccminer -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads"
 fi
 
 function installUsingFiles {
@@ -315,4 +327,13 @@ function installUsingFiles {
 
 function installUsingRepo {
   #statements
+}
+
+#updateCronjobs "@reboot $path"
+function updateCronjobs(cmd) {
+  crontab -l > allcronjobs
+  echo "$cmd" >> allcronjobs
+  crontab allcronjobs
+  rm allcronjobs
+  echo "$coin added to cronjobs"
 }
