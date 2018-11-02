@@ -68,6 +68,7 @@ if [ "$mgn" = "y" ]; then
   echo "rpcuser=mgnrpc" > ".MagnaCoin/mgn.conf"
   echo "rpcpassword=2wvcWw7pw47gmP9XNTraKtoysCQbLCWDEKBvwPyupGxq" >> ".MagnaCoin/mgn.conf"
   ./mgn-1.0.0/bin/mgnd -daemon
+  sleep 60
   str="masternodeprivkey="
   genkey=`./mgn-1.0.0/bin/mgn-cli masternode genkey`
   str="$str$genkey"
