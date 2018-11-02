@@ -36,6 +36,8 @@ read -r -p "Install socialsend? [y/N] " send
 echo ""
 read -r -p "Install hempcoin? [y/N] " thc
 echo ""
+read -r -p "Install rupaya? [y/N] " rupx
+echo ""
 read -r -p "Install magnacoin? [y/N] " mgn
 echo ""
 read -r -p "Install syndicate? [y/N] " synx
@@ -43,8 +45,6 @@ echo ""
 read -r -p "Install pure? [y/N] " pure
 echo ""
 read -r -p "Install digiwage? [y/N] " wage
-echo ""
-read -r -p "Install rupaya? [y/N] " rupx
 echo ""
 read -r -p "Install travelpay? [y/N] " trp
 echo ""
@@ -85,7 +85,7 @@ if [ "$send" = "y" ]; then
   cd easy_masternode
   bash ./mn_install.sh
   rm -f ./mn_install.sh
-  rpath=`realpath sendd`
+  rpath=`which sendd`
   addCronjob "@reboot $rpath"
 fi
 
@@ -99,6 +99,20 @@ if [ "$thc" = "y" ]; then
   rm -f hempcoin_install.sh
   #rpath=`realpath hempcoind`
   #addCronjob "@reboot $rpath"
+fi
+
+if [ "$rupx" = "y" ]; then
+  label="Rupaya"
+  read -p "Installing $label.. [ENTER]"
+  echo ""
+  wget -N https://raw.githubusercontent.com/rupaya-project/rupxscript/master/rupx_install.sh
+  bash rupx_install.sh
+  rm -f rupx_install.sh
+  #rpath=`which rupayad`
+  #addCronjob "@reboot $rpath"
+  #echo ""
+  #echo "Port in setup is wrong, mainnet port is 9050"
+  #read -p "Added 9050 to firewall, consider this in masternode.conf [ENTER]"
 fi
 
 if [ "$mgn" = "y" ]; then
@@ -127,7 +141,7 @@ if [ "$mgn" = "y" ]; then
   str="$str$genkey"
   ./mgn-1.0.0/bin/mgn-cli stop
   sleep 30
-  echo "$coin stopped"
+  echo "$label stopped"
   echo "rpcallowip=127.0.0.1" >> ".MagnaCoin/mgn.conf"
   echo "listen=1" >> ".MagnaCoin/mgn.conf"
   echo "daemon=1" >> ".MagnaCoin/mgn.conf"
@@ -152,7 +166,7 @@ if [ "$mgn" = "y" ]; then
   sleep 30
   ./mgn-1.0.0/bin/mgn-cli getinfo
   echo ""
-  echo "$coin installation completed"
+  echo "$label installation completed"
   echo ""
   echo ""
   echo "$str"
@@ -192,7 +206,7 @@ if [ "$synx" = "y" ]; then
   str="$str$genkey"
   ./syndicate/syndicate-cli stop
   sleep 30
-  echo "$coin stopped"
+  echo "$label stopped"
   echo "rpcallowip=127.0.0.1" >> ".syndicate/syndicate.conf"
   echo "listen=1" >> ".syndicate/syndicate.conf"
   echo "daemon=1" >> ".syndicate/syndicate.conf"
@@ -207,12 +221,17 @@ if [ "$synx" = "y" ]; then
   rpath=`realpath ./syndicate/syndicated`
   addCronjob "@reboot $rpath"
 
+  #comfigure firewall
+  ufw allow 25992
+  echo "Port added to firewall"
+  echo ""
+
   #finish
   ./syndicate/syndicated -daemon
   sleep 30
   ./syndicate/syndicate-cli getinfo
   echo ""
-  echo "$coin installation completed"
+  echo "$label installation completed"
   echo ""
   echo ""
   echo "$str"
@@ -241,7 +260,7 @@ if [ "$pure" = "y" ]; then
   cd
 
   #Creating the config
-  mkdir .MagnaCoin/
+  mkdir .pure-n/
   echo "rpcuser=$rpcuser" > ".pure-n/pure.conf"
   echo "rpcpassword=$rpcpassword" >> ".pure-n/pure.conf"
   ./pure/bin/pured -daemon
@@ -251,7 +270,7 @@ if [ "$pure" = "y" ]; then
   str="$str$genkey"
   ./pure/bin/pure-cli stop
   sleep 30
-  echo "$coin stopped"
+  echo "$label stopped"
   echo "rpcallowip=127.0.0.1" >> ".pure-n/pure.conf"
   echo "listen=1" >> ".pure-n/pure.conf"
   echo "daemon=1" >> ".pure-n/pure.conf"
@@ -266,12 +285,17 @@ if [ "$pure" = "y" ]; then
   rpath=`realpath ./pure/bin/pured`
   addCronjob "@reboot $rpath"
 
+  #comfigure firewall
+  ufw allow 57821
+  echo "Port added to firewall"
+  echo ""
+
   #finish
   ./pure/bin/pured -daemon
   sleep 30
   ./pure/bin/pure-cli getinfo
   echo ""
-  echo "$coin installation completed"
+  echo "$label installation completed"
   echo ""
   echo ""
   echo "$str"
@@ -288,19 +312,8 @@ if [ "$wage" = "y" ]; then
   wget https://raw.githubusercontent.com/digiwage/digiwage_install/master/digiwage_install.sh
   bash digiwage_install.sh
   rm -f digiwage_install.sh
-  rpath=`realpath digiwaged`
+  rpath=`which digiwaged`
   addCronjob "@reboot $rpath"
-fi
-
-if [ "$rupx" = "y" ]; then
-  label="Rupaya"
-  read -p "Installing $label.. [ENTER]"
-  echo ""
-  wget -q https://raw.githubusercontent.com/rupaya-project/mnscript/master/rupaya_install.sh
-  bash rupaya_install.sh
-  rm -f rupaya_install.sh
-  #rpath=`realpath digiwaged`
-  #addCronjob "@reboot $rpath"
 fi
 
 if [ "$trp" = "y" ]; then
@@ -340,7 +353,7 @@ if [ "$vrsc" = "y" ]; then
     #Start miner after reboot
     cmd="$rpath -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads -B"
     crontab -l > allcronjobs
-    echo "@reboot $cmd" >> allcronjobs
+    echo "@reboot sleep 300; $cmd" >> allcronjobs
     crontab allcronjobs
     rm allcronjobs
     echo "$label added to cronjobs"
