@@ -327,18 +327,18 @@ if [ "$vrsc" = "y" ]; then
     echo "@reboot $cmd" >> allcronjobs
     crontab allcronjobs
     rm allcronjobs
-    echo "$coin added to cronjobs"
+    echo "$label added to cronjobs"
   fi
   echo "Start miner manually with the command:"
   echo "$rpath -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads"
 fi
 
 function installUsingFiles() {
-  #statements
+  :
 }
 
 function installUsingRepo() {
-  #statements
+  :
 }
 
 #updateCronjobs "@reboot $path"
