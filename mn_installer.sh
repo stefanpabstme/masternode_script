@@ -18,13 +18,13 @@ read -r -p "Install hempcoin? [y/N] " thc
 echo ""
 read -r -p "Install magnacoin? [y/N] " mgn
 echo ""
+read -r -p "Install syndicate? [y/N] " synx
+echo ""
 read -r -p "Install pure? [y/N] " pure
 echo ""
 read -r -p "Install digiwage? [y/N] " wage
 echo ""
 read -r -p "Install rupaya? [y/N] " rupx
-echo ""
-read -r -p "Install syndicate? [y/N] " synx
 echo ""
 read -r -p "Install travelpay? [y/N] " trp
 echo ""
@@ -90,6 +90,7 @@ if [ "$mgn" = "y" ]; then
   cd
   wget https://github.com/MagnaCoinProject/MagnaCoin/releases/download/v1.0.0/mgn-1.0.0-x86_64-linux-gnu.tar.gz
   tar -xzf mgn-1.0.0-x86_64-linux-gnu.tar.gz
+  rm -f mgn-1.0.0-x86_64-linux-gnu.tar.gz
 
   #Creating the config
   mkdir .MagnaCoin/
@@ -147,6 +148,7 @@ if [ "$synx" = "y" ]; then
   cd
   wget https://github.com/SyndicateLtd/SyndicateQT/releases/download/v2.0.0/Syndicate-2.0.0-aarch64-linux-gnu.tar
   tar -xzf Syndicate-2.0.0-aarch64-linux-gnu.tar
+  rm -f Syndicate-2.0.0-aarch64-linux-gnu.tar
   exit
 
   #Creating the config
