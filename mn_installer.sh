@@ -133,6 +133,8 @@ if [ "$mgn" = "y" ]; then
   echo "$str"
   echo ""
   read -p "Copy this and create your masternode.conf file. [ENTER]"
+  echo ""
+  echo ""
 fi
 
 if [ "$synx" = "y" ]; then
@@ -195,14 +197,71 @@ if [ "$synx" = "y" ]; then
   echo "$str"
   echo ""
   read -p "Copy this and create your masternode.conf file. [ENTER]"
+  echo ""
+  echo ""
 fi
 
 if [ "$pure" = "y" ]; then
   coin="PURE"
   read -p "Installing $coin.. [ENTER]"
   echo ""
-  wget https://github.com/puredev321/pure-v2/releases/download/v2.0.0.0/pure-v2-v2.0.0.0-linux64.tar.gz
+  echo "Type the rpcuser that you want to use, followed by [ENTER]:"
+  read rpcuser
+  echo "Type the rpcpassword that you want to use, followed by [ENTER]:"
+  read rpcpassword
+  echo ""
 
+  cd
+  mkdir pure
+  cd pure
+  wget wget https://github.com/puredev321/pure-v2/releases/download/v2.0.0.0/pure-v2-v2.0.0.0-linux64.tar.gz
+  tar -xzf pure-v2-v2.0.0.0-linux64.tar.gz
+  rm -f mgn-1.0.0-x86_64-linux-gnu.tar.gz
+  cd
+
+  #Creating the config
+  mkdir .MagnaCoin/
+  echo "rpcuser=$rpcuser" > ".pure-n/pure.conf"
+  echo "rpcpassword=$rpcpassword" >> ".pure-n/pure.conf"
+  ./pure/bin/pured -daemon
+  sleep 30
+  str="masternodeprivkey="
+  genkey=`./pure/bin/pure-cli masternode genkey`
+  str="$str$genkey"
+  ./pure/bin/pure-cli stop
+  sleep 30
+  echo "$coin stopped"
+  echo "rpcallowip=127.0.0.1" >> ".pure-n/pure.conf"
+  echo "listen=1" >> ".pure-n/pure.conf"
+  echo "daemon=1" >> ".pure-n/pure.conf"
+  echo "logtimestamps=1" >> ".pure-n/pure.conf"
+  echo "maxconnections=256" >> ".pure-n/pure.conf"
+  echo "masternode=1" >> ".pure-n/pure.conf"
+  echo "$str" >> ".pure-n/pure.conf"
+  echo "pure.conf created"
+  sleep 10
+
+  #Start node after reboot
+  path=`realpath ./pure/bin/pured`
+  crontab -l > allcronjobs
+  echo "@reboot $path" >> allcronjobs
+  crontab allcronjobs
+  rm allcronjobs
+  echo "$coin added to cronjobs"
+
+  #finish
+  ./pure/bin/pured -daemon
+  sleep 30
+  ./pure/bin/pure-cli getinfo
+  echo ""
+  echo "$coin installation completed"
+  echo ""
+  echo ""
+  echo "$str"
+  echo ""
+  read -p "Copy this and create your masternode.conf file. [ENTER]"
+  echo ""
+  echo ""
 fi
 
 if [ "$wage" = "y" ]; then
@@ -226,3 +285,11 @@ fi
 if [ "$trp" = "y" ]; then
   echo "Sry.. Installing travelpay.. Damn scam.. Doesn't work atm..."
 fi
+
+function installUsingFiles {
+  #statements
+}
+
+function installUsingRepo {
+  #statements
+}
