@@ -27,6 +27,7 @@ if [ "$smart" = "y" ]; then
   cd
   wget https://rawgit.com/smartcash/smartnode/master/install.sh
   bash ./install.sh
+  rm -f install.sh
 fi
 
 if [ "$anon" = "y" ]; then
@@ -35,6 +36,7 @@ if [ "$anon" = "y" ]; then
   cd
   wget https://raw.githubusercontent.com/alttankcanada/ANONMasternodeScript/master/anon_mnsetup_install.sh
   bash ./anon_mnsetup_install.sh
+  rm -f anon_mnsetup_install.sh
 fi
 
 if [ "$send" = "y" ]; then
@@ -44,6 +46,7 @@ if [ "$send" = "y" ]; then
   git clone https://github.com/SocialSend/easy_masternode.git
   cd easy_masternode
   bash ./mn_install.sh
+  rm -f ./mn_install.sh
 fi
 
 if [ "$thc" = "y" ]; then
@@ -52,6 +55,7 @@ if [ "$thc" = "y" ]; then
   cd
   wget https://raw.githubusercontent.com/hempcoin-project/mnscript/master/hempcoin_install.sh
   bash hempcoin_install.sh
+  rm -f hempcoin_install.sh
 fi
 
 if [ "$mgn" = "y" ]; then
@@ -99,6 +103,7 @@ if [ "$wage" = "y" ]; then
   echo "Installing $coin.."
   wget https://raw.githubusercontent.com/digiwage/digiwage_install/master/digiwage_install.sh
   bash digiwage_install.sh
+  rm -f digiwage_install.sh
 fi
 
 if [ "$rupx" = "y" ]; then
@@ -106,20 +111,9 @@ if [ "$rupx" = "y" ]; then
   read -p "Installing $coin.."
   wget -q https://raw.githubusercontent.com/rupaya-project/mnscript/master/rupaya_install.sh
   bash rupaya_install.sh
+  rm -f rupaya_install.sh
 fi
 
 if [ "$trp" = "y" ]; then
-  echo "Installing travelpay.. Damn scam.. Doesn't work atm..."
+  echo "Sry.. Installing travelpay.. Damn scam.. Doesn't work atm..."
 fi
-
-function getGenkey {
-  COIN=digiwage
-  GENKEY=`$COIN-cli masternode genkey` #Creates a masternodeprivkey
-  echo $GENKEY
-  read -p "Next step: Change rpc (and maybe genkey) and save it [ENTER]"
-  cd
-  nano .$COIN/$COIN.conf
-  $COINd
-  read -p "$COIN should run now [ENTER]"
-  $COIN-cli getinfo
-}
