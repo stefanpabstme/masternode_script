@@ -60,13 +60,19 @@ fi
 
 if [ "$mgn" = "y" ]; then
   coin="MagnaCoin"
-  read -p "Installing $coin.."
+  read -p "Installing $coin..\n"
+  echo "Type the rpcuser that you want to use, followed by [ENTER]:"
+  read rpcuser
+  echo "Type the rpcpassword that you want to use, followed by [ENTER]:"
+  read rpcpassword
+  echo ""
+
   cd
   wget https://github.com/MagnaCoinProject/MagnaCoin/releases/download/v1.0.0/mgn-1.0.0-x86_64-linux-gnu.tar.gz
   tar -xzf mgn-1.0.0-x86_64-linux-gnu.tar.gz
   mkdir .MagnaCoin/
-  echo "rpcuser=mgnrpc" > ".MagnaCoin/mgn.conf"
-  echo "rpcpassword=2wvcWw7pw47gmP9XNTraKtoysCQbLCWDEKBvwPyupGxq" >> ".MagnaCoin/mgn.conf"
+  echo "rpcuser=$rpcuser" > ".MagnaCoin/mgn.conf"
+  echo "rpcpassword=$rpcpassword" >> ".MagnaCoin/mgn.conf"
   ./mgn-1.0.0/bin/mgnd -daemon
   sleep 30
   str="masternodeprivkey="
@@ -86,6 +92,7 @@ if [ "$mgn" = "y" ]; then
   echo "mgn.conf created"
   sleep 10
   ./mgn-1.0.0/bin/mgnd -daemon
+  echo "MagnaCoin installation completed"
   echo "MagnaCoin installation completed"
   
   
