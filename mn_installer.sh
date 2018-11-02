@@ -94,8 +94,8 @@ if [ "$mgn" = "y" ]; then
 
   #Creating the config
   mkdir .MagnaCoin/
-  echo "rpcuser=$rpcuser" > ".syndicate/syndicate.conf"
-  echo "rpcpassword=$rpcpassword" >> ".syndicate/syndicate.conf"
+  echo "rpcuser=$rpcuser" > ".MagnaCoin/mgn.conf"
+  echo "rpcpassword=$rpcpassword" >> ".MagnaCoin/mgn.conf"
   ./mgn-1.0.0/bin/mgnd -daemon
   sleep 30
   str="masternodeprivkey="
@@ -104,13 +104,13 @@ if [ "$mgn" = "y" ]; then
   ./mgn-1.0.0/bin/mgn-cli stop
   sleep 30
   echo "$coin stopped"
-  echo "rpcallowip=127.0.0.1" >> ".syndicate/syndicate.conf"
-  echo "listen=1" >> ".syndicate/syndicate.conf"
-  echo "daemon=1" >> ".syndicate/syndicate.conf"
-  echo "logtimestamps=1" >> ".syndicate/syndicate.conf"
-  echo "maxconnections=256" >> ".syndicate/syndicate.conf"
-  echo "masternode=1" >> ".syndicate/syndicate.conf"
-  echo "$str" >> ".syndicate/syndicate.conf"
+  echo "rpcallowip=127.0.0.1" >> ".MagnaCoin/mgn.conf"
+  echo "listen=1" >> ".MagnaCoin/mgn.conf"
+  echo "daemon=1" >> ".MagnaCoin/mgn.conf"
+  echo "logtimestamps=1" >> ".MagnaCoin/mgn.conf"
+  echo "maxconnections=256" >> ".MagnaCoin/mgn.conf"
+  echo "masternode=1" >> ".MagnaCoin/mgn.conf"
+  echo "$str" >> ".MagnaCoin/mgn.conf"
   echo "mgn.conf created"
   sleep 10
 
@@ -161,7 +161,7 @@ if [ "$synx" = "y" ]; then
   ./syndicate/syndicated -daemon
   sleep 30
   str="masternodeprivkey="
-  genkey=`./syndicate/syndicate-cli masternode genkey`
+  genkey=`syndicate/syndicate-cli masternode genkey`
   str="$str$genkey"
   ./syndicate/syndicate-cli stop
   sleep 30
@@ -177,7 +177,7 @@ if [ "$synx" = "y" ]; then
   sleep 10
 
   #Start node after reboot
-  path=`realpath ./syndicate/syndicate`
+  path=`realpath ./syndicate/syndicated`
   crontab -l > allcronjobs
   echo "@reboot $path" >> allcronjobs
   crontab allcronjobs
@@ -185,7 +185,7 @@ if [ "$synx" = "y" ]; then
   echo "$coin added to cronjobs"
 
   #finish
-  ./syndicate/syndicate -daemon
+  ./syndicate/syndicated -daemon
   sleep 30
   ./syndicate/syndicate-cli getinfo
   echo ""
