@@ -309,7 +309,7 @@ if [ "$vrsc" = "y" ]; then
   echo $procs
   threads=$((procs-1))
   echo "CPU Threads: $threads"
-  if ["$threads" = "0"]; then
+  if [ "$threads" = "0" ]; then
     threads=1
   fi
   echo ""
@@ -333,11 +333,11 @@ if [ "$vrsc" = "y" ]; then
   echo "$rpath -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads"
 fi
 
-function installUsingFiles {
+function installUsingFiles() {
   #statements
 }
 
-function installUsingRepo {
+function installUsingRepo() {
   #statements
 }
 
