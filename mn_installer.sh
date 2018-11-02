@@ -19,60 +19,76 @@ read -r -p "Install travelpay? [y/n] " trp
 
 
 if [ "$smart" = "y" ]; then
-  echo "Installing smart.."
+  coin="Smartcash"
+  read -p "Installing $coin.."
   wget https://rawgit.com/smartcash/smartnode/master/install.sh
   bash ./install.sh
 fi
 
 if [ "$anon" = "y" ]; then
-  echo "Installing anon.."
+  coin="Anonymous Bitcoin"
+  read -p "Installing $coin.."
   wget https://raw.githubusercontent.com/alttankcanada/ANONMasternodeScript/master/anon_mnsetup_install.sh
   bash ./anon_mnsetup_install.sh
 fi
 
 if [ "$send" = "y" ]; then
-  echo "Installing send.."
+  coin="SocialSend"
+  read -p "Installing $coin.."
   git clone https://github.com/SocialSend/easy_masternode.git
   cd easy_masternode
   bash ./mn_install.sh
 fi
 
 if [ "$thc" = "y" ]; then
-  echo "Installing thc.."
+  coin="Hempcoin"
+  read -p "Installing $coin.."
   wget https://raw.githubusercontent.com/hempcoin-project/mnscript/master/hempcoin_install.sh
   bash hempcoin_install.sh
 fi
 
 if [ "$mgn" = "y" ]; then
-  echo "Installing mgn.."
+  coin="MagnaCoin"
+  read -p "Installing $coin.."
   wget https://github.com/MagnaCoinProject/MagnaCoin/releases/download/v1.0.0/mgn-1.0.0-x86_64-linux-gnu.tar.gz
   uzip mgn-1.0.0-x86_64-linux-gnu.tar.gz
   
 fi
 
+if [ "$synx" = "y" ]; then
+  coin="Syndicate"
+  read -p "Installing $coin.."
+  https://github.com/SyndicateLtd/SyndicateQT/releases/download/v2.0.0/Syndicate-2.0.0-aarch64-linux-gnu.tar
+  
+fi
+
 if [ "$pure" = "y" ]; then
-  echo "Installing pure.."
+  coin="PURE"
+  echo "Installing $coin.."
   wget https://github.com/puredev321/pure-v2/releases/download/v2.0.0.0/pure-v2-v2.0.0.0-linux64.tar.gz
   
 fi
 
 if [ "$wage" = "y" ]; then
-  echo "Installing wage.."
+  coin="Digiwage"
+  echo "Installing $coin.."
   wget https://raw.githubusercontent.com/digiwage/digiwage_install/master/digiwage_install.sh
   bash digiwage_install.sh
+  read -p "Next step: Change rpc and genkey and save it [ENTER]"
+  cd
+  nano .digiwage/digiwage.conf
+  digiwaged
+  read -p "Digiwage should run now [ENTER]"
+  digiwage-cli getinfo
 fi
 
 if [ "$rupx" = "y" ]; then
-  echo "Installing rupx.."
-  
-fi
-
-if [ "$synx" = "y" ]; then
-  echo "Installing synx.."
-  
+  coin="Rupaya"
+  read -p "Installing $coin.."
+  wget -q https://raw.githubusercontent.com/rupaya-project/mnscript/master/rupaya_install.sh
+  bash rupaya_install.sh
 fi
 
 if [ "$trp" = "y" ]; then
-  echo "Installing travelpay.. Damn scam.."
-  
+  echo "Installing travelpay.. Damn scam.. Doesn't work atm..."
 fi
