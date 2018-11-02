@@ -1,6 +1,26 @@
 #!/bin/bash
+function installUsingFiles() {
+  :
+}
+
+function installUsingRepo() {
+  :
+}
+
+#updateCronjobs "@reboot $path"
+function addCronjob() {
+  cmd=$1
+  crontab -l > allcronjobs
+  echo "$cmd" >> allcronjobs
+  crontab allcronjobs
+  rm allcronjobs
+  echo "Cronjob added"
+}
+
+
 clear
-read -p "This script will install some useful dependencies and the masternodes of your choice. You've to run this as root! [ENTER]"
+echo "This script will install some useful dependencies and"
+read -p "the masternodes of your choice. You've to run this as root! [ENTER]"
 echo ""
 
 #Dependencies
@@ -296,7 +316,7 @@ if [ "$trp" = "y" ]; then
 fi
 
 if [ "$vrsc" = "y" ]; then
-  label="ccminer to mine veruscoin vrsc on cpu via versuspool.xyz"
+  label="ccminer to mine veruscoin vrsc on cpu via veruspool.xyz"
   read -p "Installing $label.. [ENTER]"
   echo ""
   echo "Submit the veruscoin address that you want to mine to, followed by [ENTER]:"
@@ -330,22 +350,5 @@ if [ "$vrsc" = "y" ]; then
     echo "$label added to cronjobs"
   fi
   echo "Start miner manually with the command:"
-  echo "$rpath -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads"
+  read -p "$rpath -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads"
 fi
-
-function installUsingFiles() {
-  :
-}
-
-function installUsingRepo() {
-  :
-}
-
-#updateCronjobs "@reboot $path"
-function updateCronjobs(cmd) {
-  crontab -l > allcronjobs
-  echo "$cmd" >> allcronjobs
-  crontab allcronjobs
-  rm allcronjobs
-  echo "$coin added to cronjobs"
-}
