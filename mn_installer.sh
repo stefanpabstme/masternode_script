@@ -94,8 +94,8 @@ if [ "$mgn" = "y" ]; then
 
   #Creating the config
   mkdir .MagnaCoin/
-  echo "rpcuser=$rpcuser" > ".MagnaCoin/mgn.conf"
-  echo "rpcpassword=$rpcpassword" >> ".MagnaCoin/mgn.conf"
+  echo "rpcuser=$rpcuser" > ".syndicate/syndicate.conf"
+  echo "rpcpassword=$rpcpassword" >> ".syndicate/syndicate.conf"
   ./mgn-1.0.0/bin/mgnd -daemon
   sleep 30
   str="masternodeprivkey="
@@ -104,13 +104,13 @@ if [ "$mgn" = "y" ]; then
   ./mgn-1.0.0/bin/mgn-cli stop
   sleep 30
   echo "$coin stopped"
-  echo "rpcallowip=127.0.0.1" >> ".MagnaCoin/mgn.conf"
-  echo "listen=1" >> ".MagnaCoin/mgn.conf"
-  echo "daemon=1" >> ".MagnaCoin/mgn.conf"
-  echo "logtimestamps=1" >> ".MagnaCoin/mgn.conf"
-  echo "maxconnections=256" >> ".MagnaCoin/mgn.conf"
-  echo "masternode=1" >> ".MagnaCoin/mgn.conf"
-  echo "$str" >> ".MagnaCoin/mgn.conf"
+  echo "rpcallowip=127.0.0.1" >> ".syndicate/syndicate.conf"
+  echo "listen=1" >> ".syndicate/syndicate.conf"
+  echo "daemon=1" >> ".syndicate/syndicate.conf"
+  echo "logtimestamps=1" >> ".syndicate/syndicate.conf"
+  echo "maxconnections=256" >> ".syndicate/syndicate.conf"
+  echo "masternode=1" >> ".syndicate/syndicate.conf"
+  echo "$str" >> ".syndicate/syndicate.conf"
   echo "mgn.conf created"
   sleep 10
 
@@ -146,35 +146,38 @@ if [ "$synx" = "y" ]; then
   echo ""
 
   cd
+  mkdir syndicate
+  cd syndicate
   wget https://github.com/SyndicateLtd/SyndicateQT/releases/download/v2.0.0/Syndicate-2.0.0-x86_64-linux-gnu.zip
-  tar -xzf Syndicate-2.0.0-x86_64-linux-gnu.zip
+  unzip Syndicate-2.0.0-x86_64-linux-gnu.zip
   rm -f Syndicate-2.0.0-x86_64-linux-gnu.zip
-  exit
+  chmod +x syndicated syndicate-cli syndicate-tx
+  cd
 
   #Creating the config
-  mkdir .MagnaCoin/
-  echo "rpcuser=$rpcuser" > ".MagnaCoin/mgn.conf"
-  echo "rpcpassword=$rpcpassword" >> ".MagnaCoin/mgn.conf"
-  ./mgn-1.0.0/bin/mgnd -daemon
+  mkdir .syndicate/
+  echo "rpcuser=$rpcuser" > ".syndicate/syndicate.conf"
+  echo "rpcpassword=$rpcpassword" >> ".syndicate/syndicate.conf"
+  ./syndicate/syndicated -daemon
   sleep 30
   str="masternodeprivkey="
-  genkey=`./mgn-1.0.0/bin/mgn-cli masternode genkey`
+  genkey=`./syndicate/syndicate-cli masternode genkey`
   str="$str$genkey"
-  ./mgn-1.0.0/bin/mgn-cli stop
+  ./syndicate/syndicate-cli stop
   sleep 30
   echo "$coin stopped"
-  echo "rpcallowip=127.0.0.1" >> ".MagnaCoin/mgn.conf"
-  echo "listen=1" >> ".MagnaCoin/mgn.conf"
-  echo "daemon=1" >> ".MagnaCoin/mgn.conf"
-  echo "logtimestamps=1" >> ".MagnaCoin/mgn.conf"
-  echo "maxconnections=256" >> ".MagnaCoin/mgn.conf"
-  echo "masternode=1" >> ".MagnaCoin/mgn.conf"
-  echo "$str" >> ".MagnaCoin/mgn.conf"
-  echo "mgn.conf created"
+  echo "rpcallowip=127.0.0.1" >> ".syndicate/syndicate.conf"
+  echo "listen=1" >> ".syndicate/syndicate.conf"
+  echo "daemon=1" >> ".syndicate/syndicate.conf"
+  echo "logtimestamps=1" >> ".syndicate/syndicate.conf"
+  echo "maxconnections=256" >> ".syndicate/syndicate.conf"
+  echo "masternode=1" >> ".syndicate/syndicate.conf"
+  echo "$str" >> ".syndicate/syndicate.conf"
+  echo "syndicate.conf created"
   sleep 10
 
   #Start node after reboot
-  path=`realpath ./mgn-1.0.0/bin/mgnd`
+  path=`realpath ./syndicate/syndicate`
   crontab -l > allcronjobs
   echo "@reboot $path" >> allcronjobs
   crontab allcronjobs
@@ -182,9 +185,9 @@ if [ "$synx" = "y" ]; then
   echo "$coin added to cronjobs"
 
   #finish
-  ./mgn-1.0.0/bin/mgnd -daemon
+  ./syndicate/syndicate -daemon
   sleep 30
-  ./mgn-1.0.0/bin/mgn-cli getinfo
+  ./syndicate/syndicate-cli getinfo
   echo ""
   echo "$coin installation completed"
   echo ""
