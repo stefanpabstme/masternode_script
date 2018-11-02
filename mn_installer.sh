@@ -16,6 +16,9 @@ read -r -p "Install digiwage? [y/n] " wage
 read -r -p "Install rupaya? [y/n] " rupx
 read -r -p "Install syndicate? [y/n] " synx
 read -r -p "Install travelpay? [y/n] " trp
+#read -r -p "Install veruscoin cpu miner? [y/n] " vrsc
+#read -r -p "Install komodo cpu miner? [y/n] " kmd
+#read -r -p "Install monero miner? [y/n] " vrsc
 
 
 if [ "$smart" = "y" ]; then
@@ -74,12 +77,6 @@ if [ "$wage" = "y" ]; then
   echo "Installing $coin.."
   wget https://raw.githubusercontent.com/digiwage/digiwage_install/master/digiwage_install.sh
   bash digiwage_install.sh
-  read -p "Next step: Change rpc and genkey and save it [ENTER]"
-  cd
-  nano .digiwage/digiwage.conf
-  digiwaged
-  read -p "Digiwage should run now [ENTER]"
-  digiwage-cli getinfo
 fi
 
 if [ "$rupx" = "y" ]; then
@@ -92,3 +89,15 @@ fi
 if [ "$trp" = "y" ]; then
   echo "Installing travelpay.. Damn scam.. Doesn't work atm..."
 fi
+
+function getGenkey {
+  COIN=digiwage
+  GENKEY=`$COIN-cli masternode genkey` #Creates a masternodeprivkey
+  echo $GENKEY
+  read -p "Next step: Change rpc (and maybe genkey) and save it [ENTER]"
+  cd
+  nano .$COIN/$COIN.conf
+  $COINd
+  read -p "$COIN should run now [ENTER]"
+  $COIN-cli getinfo
+}
