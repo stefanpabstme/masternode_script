@@ -147,7 +147,7 @@ if [ "$synx" = "y" ]; then
 
   cd
   wget https://github.com/SyndicateLtd/SyndicateQT/releases/download/v2.0.0/Syndicate-2.0.0-aarch64-linux-gnu.tar
-  tar -xzf Syndicate-2.0.0-aarch64-linux-gnu.tar
+  tar -xvf Syndicate-2.0.0-aarch64-linux-gnu.tar
   rm -f Syndicate-2.0.0-aarch64-linux-gnu.tar
   exit
 
