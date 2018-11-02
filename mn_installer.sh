@@ -37,8 +37,8 @@ echo ""
 echo ""
 
 if [ "$smart" = "y" ]; then
-  coin="Smartcash"
-  read -p "Installing $coin.. [ENTER]"
+  label="Smartcash"
+  read -p "Installing $label.. [ENTER]"
   echo ""
   cd
   wget https://rawgit.com/smartcash/smartnode/master/install.sh
@@ -47,8 +47,8 @@ if [ "$smart" = "y" ]; then
 fi
 
 if [ "$anon" = "y" ]; then
-  coin="Anonymous Bitcoin"
-  read -p "Installing $coin.. [ENTER]"
+  label="Anonymous Bitcoin"
+  read -p "Installing $label.. [ENTER]"
   echo ""
   cd
   wget https://raw.githubusercontent.com/alttankcanada/ANONMasternodeScript/master/anon_mnsetup_install.sh
@@ -57,29 +57,31 @@ if [ "$anon" = "y" ]; then
 fi
 
 if [ "$send" = "y" ]; then
-  coin="SocialSend"
-  read -p "Installing $coin.. [ENTER]"
+  label="SocialSend"
+  read -p "Installing $label.. [ENTER]"
   echo ""
   cd
   git clone https://github.com/SocialSend/easy_masternode.git
   cd easy_masternode
   bash ./mn_install.sh
   rm -f ./mn_install.sh
+  #add to cron
 fi
 
 if [ "$thc" = "y" ]; then
-  coin="Hempcoin"
-  read -p "Installing $coin.. [ENTER]"
+  label="Hempcoin"
+  read -p "Installing $label.. [ENTER]"
   echo ""
   cd
   wget https://raw.githubusercontent.com/hempcoin-project/mnscript/master/hempcoin_install.sh
   bash hempcoin_install.sh
   rm -f hempcoin_install.sh
+  #add to cron
 fi
 
 if [ "$mgn" = "y" ]; then
-  coin="MagnaCoin"
-  read -p "Installing $coin.. [ENTER]"
+  label="MagnaCoin"
+  read -p "Installing $label.. [ENTER]"
   echo ""
   echo "Type the rpcuser that you want to use, followed by [ENTER]:"
   read rpcuser
@@ -122,6 +124,11 @@ if [ "$mgn" = "y" ]; then
   rm allcronjobs
   echo "$coin added to cronjobs"
 
+  #comfigure firewall
+  ufw allow 57821
+  echo "Port added to firewall"
+  echo ""
+
   #finish
   ./mgn-1.0.0/bin/mgnd -daemon
   sleep 30
@@ -138,8 +145,8 @@ if [ "$mgn" = "y" ]; then
 fi
 
 if [ "$synx" = "y" ]; then
-  coin="Syndicate"
-  read -p "Installing $coin.. [ENTER]"
+  label="Syndicate"
+  read -p "Installing $label.. [ENTER]"
   echo ""
   echo "Type the rpcuser that you want to use, followed by [ENTER]:"
   read rpcuser
@@ -202,8 +209,8 @@ if [ "$synx" = "y" ]; then
 fi
 
 if [ "$pure" = "y" ]; then
-  coin="PURE"
-  read -p "Installing $coin.. [ENTER]"
+  label="PURE"
+  read -p "Installing $label.. [ENTER]"
   echo ""
   echo "Type the rpcuser that you want to use, followed by [ENTER]:"
   read rpcuser
@@ -265,21 +272,23 @@ if [ "$pure" = "y" ]; then
 fi
 
 if [ "$wage" = "y" ]; then
-  coin="Digiwage"
-  read -p "Installing $coin.. [ENTER]"
+  label="Digiwage"
+  read -p "Installing $label.. [ENTER]"
   echo ""
   wget https://raw.githubusercontent.com/digiwage/digiwage_install/master/digiwage_install.sh
   bash digiwage_install.sh
   rm -f digiwage_install.sh
+  #add to cron
 fi
 
 if [ "$rupx" = "y" ]; then
-  coin="Rupaya"
-  read -p "Installing $coin.. [ENTER]"
+  label="Rupaya"
+  read -p "Installing $label.. [ENTER]"
   echo ""
   wget -q https://raw.githubusercontent.com/rupaya-project/mnscript/master/rupaya_install.sh
   bash rupaya_install.sh
   rm -f rupaya_install.sh
+  #add to cron
 fi
 
 if [ "$trp" = "y" ]; then
@@ -287,17 +296,19 @@ if [ "$trp" = "y" ]; then
 fi
 
 if [ "$vrsc" = "y" ]; then
-  coin="ccminer to mine veruscoin vrsc on cpu via versuspool.xyz"
-  read -p "Installing $coin.. [ENTER]"
+  label="ccminer to mine veruscoin vrsc on cpu via versuspool.xyz"
+  read -p "Installing $label.. [ENTER]"
   echo ""
   echo "Submit the veruscoin address that you want to mine to, followed by [ENTER]:"
   read address
   echo "If wanted, type in a workerid, followed by [ENTER]:"
   read workerid
   read -r -p "Should the miner start after reboot? [y/N]" reboot
-  read workerid
   address="$address.$workerid"
-  threads=$(nproc)-1
+  procs=$(nproc)
+  echo $procs
+  threads=$((procs-1))
+  echo "CPU Threads: $threads"
   if ["$threads" = "0"]; then
     threads=1
   fi
@@ -308,9 +319,10 @@ if [ "$vrsc" = "y" ]; then
   git clone -b cpuonlyverus https://github.com/monkins1010/ccminer ccminer-veruscoin
   cd ccminer-veruscoin
   ./build.sh
+  rpath=`realpath ./ccminer`
   if [ "$reboot" = "y" ]; then
     #Start miner after reboot
-    cmd=`realpath ./ccminer -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads -B`
+    cmd="$rpath -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads -B"
     crontab -l > allcronjobs
     echo "@reboot $cmd" >> allcronjobs
     crontab allcronjobs
@@ -318,7 +330,7 @@ if [ "$vrsc" = "y" ]; then
     echo "$coin added to cronjobs"
   fi
   echo "Start miner manually with the command:"
-  echo "./ccminer -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads"
+  echo "$rpath -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads"
 fi
 
 function installUsingFiles {
