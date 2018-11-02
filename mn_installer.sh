@@ -28,10 +28,10 @@ read -r -p "Install rupaya? [y/N] " rupx
 echo ""
 read -r -p "Install travelpay? [y/N] " trp
 echo ""
-#read -r -p "Install veruscoin cpu miner? [y/N] " vrsc
+read -r -p "Install veruscoin cpu miner? [y/N] " vrsc
 echo ""
 #read -r -p "Install komodo cpu miner? [y/N] " kmd
-echo ""
+#echo ""
 #read -r -p "Install monero cpu miner? [y/N] " xmr
 echo ""
 echo ""
@@ -284,6 +284,29 @@ fi
 
 if [ "$trp" = "y" ]; then
   echo "Sry.. Installing travelpay.. Damn scam.. Doesn't work atm..."
+fi
+
+if [ "$vrsc" = "y" ]; then
+  coin="ccminer to mine veruscoin vrsc on cpu via versuspool.xyz"
+  read -p "Installing $coin.. [ENTER]"
+  echo ""
+  echo "Submit the veruscoin address that you want to mine to, followed by [ENTER]:"
+  read address
+  echo "If wanted, type in a workerid, followed by [ENTER]:"
+  read workerid
+  address="$address.$workerid"
+  threads=$(nproc)-1
+  if ["$threads" = "0"]; then
+    threads=1
+  fi
+  echo ""
+  sudo apt update
+  sudo apt -y upgrade
+  sudo apt -y install git libcurl4-openssl-dev libssl-dev libjansson-dev automake autotools-dev build-essential
+  git clone -b cpuonlyverus https://github.com/monkins1010/ccminer ccminer-veruscoin
+  cd ccminer-veruscoin
+  ./build.sh
+  echo `./ccminer -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads`
 fi
 
 function installUsingFiles {
