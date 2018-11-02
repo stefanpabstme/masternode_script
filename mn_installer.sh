@@ -1,9 +1,9 @@
-#!/bin/bash 
+#!/bin/bash
 clear
-read -p "This script will install some useful dependencies and the masternodes of your choice. You've to run this as root! [ENTER]"
+read -p "This script will install some useful dependencies and the masternodes of your choice. You've to run this as root! [ENTER]\n"
 
 
-apt-get install nano htop git 
+apt-get install nano htop git realpath
 
 
 read -r -p "Install smartcash? [y/n] " smart
@@ -18,12 +18,12 @@ read -r -p "Install syndicate? [y/n] " synx
 read -r -p "Install travelpay? [y/n] " trp
 #read -r -p "Install veruscoin cpu miner? [y/n] " vrsc
 #read -r -p "Install komodo cpu miner? [y/n] " kmd
-#read -r -p "Install monero miner? [y/n] " vrsc
-
+#read -r -p "Install monero cpu miner? [y/n] " vrsc
+echo "\n\n"
 
 if [ "$smart" = "y" ]; then
   coin="Smartcash"
-  read -p "Installing $coin.."
+  read -p "Installing $coin.. [ENTER]\n"
   cd
   wget https://rawgit.com/smartcash/smartnode/master/install.sh
   bash ./install.sh
@@ -32,7 +32,7 @@ fi
 
 if [ "$anon" = "y" ]; then
   coin="Anonymous Bitcoin"
-  read -p "Installing $coin.."
+  read -p "Installing $coin.. [ENTER]\n"
   cd
   wget https://raw.githubusercontent.com/alttankcanada/ANONMasternodeScript/master/anon_mnsetup_install.sh
   bash ./anon_mnsetup_install.sh
@@ -41,7 +41,7 @@ fi
 
 if [ "$send" = "y" ]; then
   coin="SocialSend"
-  read -p "Installing $coin.."
+  read -p "Installing $coin.. [ENTER]\n"
   cd
   git clone https://github.com/SocialSend/easy_masternode.git
   cd easy_masternode
@@ -51,7 +51,7 @@ fi
 
 if [ "$thc" = "y" ]; then
   coin="Hempcoin"
-  read -p "Installing $coin.."
+  read -p "Installing $coin.. [ENTER]\n"
   cd
   wget https://raw.githubusercontent.com/hempcoin-project/mnscript/master/hempcoin_install.sh
   bash hempcoin_install.sh
@@ -60,7 +60,7 @@ fi
 
 if [ "$mgn" = "y" ]; then
   coin="MagnaCoin"
-  read -p "Installing $coin..\n"
+  read -p "Installing $coin.. [ENTER]\n"
   echo "Type the rpcuser that you want to use, followed by [ENTER]:"
   read rpcuser
   echo "Type the rpcpassword that you want to use, followed by [ENTER]:"
@@ -70,6 +70,8 @@ if [ "$mgn" = "y" ]; then
   cd
   wget https://github.com/MagnaCoinProject/MagnaCoin/releases/download/v1.0.0/mgn-1.0.0-x86_64-linux-gnu.tar.gz
   tar -xzf mgn-1.0.0-x86_64-linux-gnu.tar.gz
+
+  #Creating the config
   mkdir .MagnaCoin/
   echo "rpcuser=$rpcuser" > ".MagnaCoin/mgn.conf"
   echo "rpcpassword=$rpcpassword" >> ".MagnaCoin/mgn.conf"
@@ -78,10 +80,9 @@ if [ "$mgn" = "y" ]; then
   str="masternodeprivkey="
   genkey=`./mgn-1.0.0/bin/mgn-cli masternode genkey`
   str="$str$genkey"
-  echo "$str"
   ./mgn-1.0.0/bin/mgn-cli stop
   sleep 30
-  echo "mgnd stopped"
+  echo "MagnaCoin stopped"
   echo "rpcallowip=127.0.0.1" >> ".MagnaCoin/mgn.conf"
   echo "listen=1" >> ".MagnaCoin/mgn.conf"
   echo "daemon=1" >> ".MagnaCoin/mgn.conf"
@@ -91,31 +92,41 @@ if [ "$mgn" = "y" ]; then
   echo "$str" >> ".MagnaCoin/mgn.conf"
   echo "mgn.conf created"
   sleep 10
+
+  #Start node after reboot
+  path=`realpath ./mgn-1.0.0/bin/mgnd`
+  crontab -l > allcronjobs
+  echo "@reboot $path" >> allcronjobs
+  crontab allcronjobs
+  rm allcronjobs
+  echo "$coin added to cronjobs"
+
+  #finish
   ./mgn-1.0.0/bin/mgnd -daemon
-  echo "MagnaCoin installation completed"
-  echo "MagnaCoin installation completed"
-  
-  
-  
+  sleep 30
+  ./mgn-1.0.0/bin/mgn-cli getinfo
+  echo "\n"
+  echo "$coin installation completed\n"
+  read -p "$str\nCopy this and create your masternode.conf file. [ENTER]"
 fi
 
 if [ "$synx" = "y" ]; then
   coin="Syndicate"
-  read -p "Installing $coin.."
+  read -p "Installing $coin.. [ENTER]\n"
   https://github.com/SyndicateLtd/SyndicateQT/releases/download/v2.0.0/Syndicate-2.0.0-aarch64-linux-gnu.tar
-  
+
 fi
 
 if [ "$pure" = "y" ]; then
   coin="PURE"
-  echo "Installing $coin.."
+  read -p "Installing $coin.. [ENTER]\n"
   wget https://github.com/puredev321/pure-v2/releases/download/v2.0.0.0/pure-v2-v2.0.0.0-linux64.tar.gz
-  
+
 fi
 
 if [ "$wage" = "y" ]; then
   coin="Digiwage"
-  echo "Installing $coin.."
+  read -p "Installing $coin.. [ENTER]\n"
   wget https://raw.githubusercontent.com/digiwage/digiwage_install/master/digiwage_install.sh
   bash digiwage_install.sh
   rm -f digiwage_install.sh
@@ -123,7 +134,7 @@ fi
 
 if [ "$rupx" = "y" ]; then
   coin="Rupaya"
-  read -p "Installing $coin.."
+  read -p "Installing $coin.. [ENTER]\n"
   wget -q https://raw.githubusercontent.com/rupaya-project/mnscript/master/rupaya_install.sh
   bash rupaya_install.sh
   rm -f rupaya_install.sh
