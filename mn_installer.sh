@@ -72,8 +72,10 @@ if [ "$mgn" = "y" ]; then
   str="masternodeprivkey="
   genkey=`./mgn-1.0.0/bin/mgn-cli masternode genkey`
   str="$str$genkey"
+  echo "$str"
   ./mgn-1.0.0/bin/mgn-cli stop
-  sleep 5
+  sleep 30
+  echo "mgnd stopped"
   echo "rpcallowip=127.0.0.1" >> ".MagnaCoin/mgn.conf"
   echo "listen=1" >> ".MagnaCoin/mgn.conf"
   echo "daemon=1" >> ".MagnaCoin/mgn.conf"
@@ -81,7 +83,10 @@ if [ "$mgn" = "y" ]; then
   echo "maxconnections=256" >> ".MagnaCoin/mgn.conf"
   echo "masternode=1" >> ".MagnaCoin/mgn.conf"
   echo "$str" >> ".MagnaCoin/mgn.conf"
+  echo "mgn.conf created"
+  sleep 10
   ./mgn-1.0.0/bin/mgnd -daemon
+  echo "MagnaCoin installation completed"
   
   
   
