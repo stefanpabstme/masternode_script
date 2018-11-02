@@ -61,19 +61,19 @@ if [ "$mgn" = "y" ]; then
   wget https://github.com/MagnaCoinProject/MagnaCoin/releases/download/v1.0.0/mgn-1.0.0-x86_64-linux-gnu.tar.gz
   tar -xzf mgn-1.0.0-x86_64-linux-gnu.tar.gz
   mkdir .MagnaCoin/
-  echo "rpcuser=mgnrpc" > "./MagnaCoin/mgn.conf"
-  echo "rpcpassword=2wvcWw7pw47gmP9XNTraKtoysCQbLCWDEKBvwPyupGxq" >> "./MagnaCoin/mgn.conf"
+  echo "rpcuser=mgnrpc" > ".MagnaCoin/mgn.conf"
+  echo "rpcpassword=2wvcWw7pw47gmP9XNTraKtoysCQbLCWDEKBvwPyupGxq" >> ".MagnaCoin/mgn.conf"
   ./mgn-1.0.0/bin/mgnd -daemon
   str="masternodeprivkey="
   genkey=`$COIN-cli masternode genkey`
   str="$str$genkey"
-  echo "rpcallowip=127.0.0.1" >> "./MagnaCoin/mgn.conf"
-  echo "listen=1" >> "./MagnaCoin/mgn.conf"
-  echo "daemon=1" >> "./MagnaCoin/mgn.conf"
-  echo "logtimestamps=1" >> "./MagnaCoin/mgn.conf"
-  echo "maxconnections=256" >> "./MagnaCoin/mgn.conf"
-  echo "masternode=1" >> "./MagnaCoin/mgn.conf"
-  echo "$str" >> "./MagnaCoin/mgn.conf"
+  echo "rpcallowip=127.0.0.1" >> ".MagnaCoin/mgn.conf"
+  echo "listen=1" >> ".MagnaCoin/mgn.conf"
+  echo "daemon=1" >> ".MagnaCoin/mgn.conf"
+  echo "logtimestamps=1" >> ".MagnaCoin/mgn.conf"
+  echo "maxconnections=256" >> ".MagnaCoin/mgn.conf"
+  echo "masternode=1" >> ".MagnaCoin/mgn.conf"
+  echo "$str" >> ".MagnaCoin/mgn.conf"
   ./mgn-1.0.0/bin/mgnd -daemon
   
   
