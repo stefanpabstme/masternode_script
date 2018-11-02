@@ -3,35 +3,36 @@ clear
 read -p "This script will install some useful dependencies and the masternodes of your choice. You've to run this as root! [ENTER]"
 echo ""
 
-
+#Dependencies
 apt-get install -y nano htop git realpath
 
-
-read -r -p "Install smartcash? [y/n] " smart
 echo ""
-read -r -p "Install anonymousbitcoin? [y/n] " anon
 echo ""
-read -r -p "Install socialsend? [y/n] " send
+read -r -p "Install smartcash? [y/N] " smart
 echo ""
-read -r -p "Install hempcoin? [y/n] " thc
+read -r -p "Install anonymousbitcoin? [y/N] " anon
 echo ""
-read -r -p "Install magnacoin? [y/n] " mgn
+read -r -p "Install socialsend? [y/N] " send
 echo ""
-read -r -p "Install pure? [y/n] " pure
+read -r -p "Install hempcoin? [y/N] " thc
 echo ""
-read -r -p "Install digiwage? [y/n] " wage
+read -r -p "Install magnacoin? [y/N] " mgn
 echo ""
-read -r -p "Install rupaya? [y/n] " rupx
+read -r -p "Install pure? [y/N] " pure
 echo ""
-read -r -p "Install syndicate? [y/n] " synx
+read -r -p "Install digiwage? [y/N] " wage
 echo ""
-read -r -p "Install travelpay? [y/n] " trp
+read -r -p "Install rupaya? [y/N] " rupx
 echo ""
-#read -r -p "Install veruscoin cpu miner? [y/n] " vrsc
+read -r -p "Install syndicate? [y/N] " synx
 echo ""
-#read -r -p "Install komodo cpu miner? [y/n] " kmd
+read -r -p "Install travelpay? [y/N] " trp
 echo ""
-#read -r -p "Install monero cpu miner? [y/n] " xmr
+#read -r -p "Install veruscoin cpu miner? [y/N] " vrsc
+echo ""
+#read -r -p "Install komodo cpu miner? [y/N] " kmd
+echo ""
+#read -r -p "Install monero cpu miner? [y/N] " xmr
 echo ""
 echo ""
 
@@ -101,7 +102,7 @@ if [ "$mgn" = "y" ]; then
   str="$str$genkey"
   ./mgn-1.0.0/bin/mgn-cli stop
   sleep 30
-  echo "MagnaCoin stopped"
+  echo "$coin stopped"
   echo "rpcallowip=127.0.0.1" >> ".MagnaCoin/mgn.conf"
   echo "listen=1" >> ".MagnaCoin/mgn.conf"
   echo "daemon=1" >> ".MagnaCoin/mgn.conf"
@@ -124,10 +125,12 @@ if [ "$mgn" = "y" ]; then
   ./mgn-1.0.0/bin/mgnd -daemon
   sleep 30
   ./mgn-1.0.0/bin/mgn-cli getinfo
-  echo "\n"
+  echo ""
   echo "$coin installation completed"
   echo ""
+  echo ""
   echo "$str"
+  echo ""
   read -p "Copy this and create your masternode.conf file. [ENTER]"
 fi
 
@@ -135,8 +138,58 @@ if [ "$synx" = "y" ]; then
   coin="Syndicate"
   read -p "Installing $coin.. [ENTER]"
   echo ""
-  https://github.com/SyndicateLtd/SyndicateQT/releases/download/v2.0.0/Syndicate-2.0.0-aarch64-linux-gnu.tar
+  echo "Type the rpcuser that you want to use, followed by [ENTER]:"
+  read rpcuser
+  echo "Type the rpcpassword that you want to use, followed by [ENTER]:"
+  read rpcpassword
+  echo ""
 
+  cd
+  wget https://github.com/SyndicateLtd/SyndicateQT/releases/download/v2.0.0/Syndicate-2.0.0-aarch64-linux-gnu.tar
+  tar -xzf Syndicate-2.0.0-aarch64-linux-gnu.tar
+  exit
+
+  #Creating the config
+  mkdir .MagnaCoin/
+  echo "rpcuser=$rpcuser" > ".MagnaCoin/mgn.conf"
+  echo "rpcpassword=$rpcpassword" >> ".MagnaCoin/mgn.conf"
+  ./mgn-1.0.0/bin/mgnd -daemon
+  sleep 30
+  str="masternodeprivkey="
+  genkey=`./mgn-1.0.0/bin/mgn-cli masternode genkey`
+  str="$str$genkey"
+  ./mgn-1.0.0/bin/mgn-cli stop
+  sleep 30
+  echo "$coin stopped"
+  echo "rpcallowip=127.0.0.1" >> ".MagnaCoin/mgn.conf"
+  echo "listen=1" >> ".MagnaCoin/mgn.conf"
+  echo "daemon=1" >> ".MagnaCoin/mgn.conf"
+  echo "logtimestamps=1" >> ".MagnaCoin/mgn.conf"
+  echo "maxconnections=256" >> ".MagnaCoin/mgn.conf"
+  echo "masternode=1" >> ".MagnaCoin/mgn.conf"
+  echo "$str" >> ".MagnaCoin/mgn.conf"
+  echo "mgn.conf created"
+  sleep 10
+
+  #Start node after reboot
+  path=`realpath ./mgn-1.0.0/bin/mgnd`
+  crontab -l > allcronjobs
+  echo "@reboot $path" >> allcronjobs
+  crontab allcronjobs
+  rm allcronjobs
+  echo "$coin added to cronjobs"
+
+  #finish
+  ./mgn-1.0.0/bin/mgnd -daemon
+  sleep 30
+  ./mgn-1.0.0/bin/mgn-cli getinfo
+  echo ""
+  echo "$coin installation completed"
+  echo ""
+  echo ""
+  echo "$str"
+  echo ""
+  read -p "Copy this and create your masternode.conf file. [ENTER]"
 fi
 
 if [ "$pure" = "y" ]; then
