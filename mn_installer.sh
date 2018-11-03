@@ -337,7 +337,8 @@ if [ "$vrsc" = "y" ]; then
   echo "If wanted, type in a workerid, followed by [ENTER]:"
   read workerid
   read -r -p "Should the miner start after reboot? [y/N]" reboot
-  read -r -p "How many threads? Leave blank to use default value" threads
+  echo "How many threads? Leave blank to use default value"
+  read threads
   address="$address.$workerid"
   procs=$(nproc)
   echo $procs
