@@ -85,8 +85,16 @@ if [ "$send" = "y" ]; then
   cd easy_masternode
   bash ./mn_install.sh
   rm -f ./mn_install.sh
+  cd
+  sleep 10
+  pkey=`send-cli masternode genkey`
+  echo "masternode=1" >> .send/send.conf
+  echo "masternodeprivkey=$pkey" >> .send/send.conf
   rpath=`which sendd`
   addCronjob "@reboot $rpath"
+  echo "masternodeprivkey=$pkey"
+  echo ""
+  read -p "Copy this and create your masternode.conf file. [ENTER]"
 fi
 
 if [ "$thc" = "y" ]; then
