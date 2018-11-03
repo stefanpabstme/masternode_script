@@ -1,4 +1,4 @@
-# masternode_script
+# multinode_vps
 
 Download and start the script:
 
