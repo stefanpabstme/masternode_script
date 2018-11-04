@@ -34,7 +34,7 @@ echo ""
 echo "You've to run this as root!"
 echo ""
 
-if [ ! "$silentmode" ]; then
+if [ "$silentmode" != true ]; then
   clear
   echo "This script will install some useful dependencies and"
   read -p "the masternodes of your choice. [ENTER]"
@@ -44,7 +44,7 @@ fi
 #Dependencies
 apt-get install -y nano htop git realpath
 
-if [ ! "$silentmode" ]; then
+if [ "$silentmode" != true ]; then
   echo ""
   echo ""
   read -r -p "Install smartcash? [y/N] " smart
@@ -368,7 +368,7 @@ fi
 
 if [ "$vrsc" = "y" ]; then
   label="ccminer to mine veruscoin vrsc on cpu via veruspool.xyz"
-  if [ ! "$silentmode" ]; then
+  if [ "$silentmode" != true ]; then
     read -p "Installing $label.. [ENTER]"
     echo ""
     echo "Submit the veruscoin address that you want to mine to, followed by [ENTER]:"
@@ -414,7 +414,7 @@ if [ "$vrsc" = "y" ]; then
     rm allcronjobs
     echo "$label added to cronjobs"
   fi
-  if [ ! "$silentmode" ]; then
+  if [ "$silentmode" != true ]; then
     echo ""
     echo "Start miner manually with the command:"
     read -p "$rpath -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads"
