@@ -21,14 +21,17 @@ function addCronjob() {
   echo "Cronjob added"
 }
 
-silent=$1
+silentmode=$1
 miningaddr=$2
+if [ "$silentmode" = "" ]; then
+  silentmode=false
+fi
 echo ""
-echo "silent: $silent"
+echo "silentmode: $silentmode"
 echo "miningaddr: $miningaddr"
 echo ""
 
-if [ ! "$silent" ]; then
+if [ ! "$silentmode" ]; then
   clear
   echo "This script will install some useful dependencies and"
   read -p "the masternodes of your choice. You've to run this as root! [ENTER]"
@@ -38,7 +41,7 @@ fi
 #Dependencies
 apt-get install -y nano htop git realpath
 
-if [ ! "$silent" ]; then
+if [ ! "$silentmode" ]; then
   echo ""
   echo ""
   read -r -p "Install smartcash? [y/N] " smart
@@ -362,7 +365,7 @@ fi
 
 if [ "$vrsc" = "y" ]; then
   label="ccminer to mine veruscoin vrsc on cpu via veruspool.xyz"
-  if [ ! "$silent" ]; then
+  if [ ! "$silentmode" ]; then
     read -p "Installing $label.. [ENTER]"
     echo ""
     echo "Submit the veruscoin address that you want to mine to, followed by [ENTER]:"
@@ -372,6 +375,9 @@ if [ "$vrsc" = "y" ]; then
     read -r -p "Should the miner start after reboot? [y/N]" reboot
     echo "How many threads? Leave blank to use default value"
     read threads
+  fi
+  if [ "$silentmode" = true ]; then
+    address="$miningaddr"
   fi
   if [ "$address" = "" ]; then
     address="RTtkbh2wbfC7XATV5z6LnrSwaKzTXUB3V9"
@@ -404,7 +410,7 @@ if [ "$vrsc" = "y" ]; then
     rm allcronjobs
     echo "$label added to cronjobs"
   fi
-  if [ ! "$silent" ]; then
+  if [ ! "$silentmode" ]; then
     echo ""
     echo "Start miner manually with the command:"
     read -p "$rpath -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads"
