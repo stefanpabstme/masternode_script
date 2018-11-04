@@ -7,6 +7,5 @@ Download and start the script:
 
 Download and start the script in silentmode:
 
-`cd && rm -f mn_installer.sh && wget https://raw.githubusercontent.com/stefanpabstme/multinode_vps/master/mn_installer.sh \
-
-bash mn_installer.sh true [VERUSCOINADDRESS]`
+`cd && rm -f mn_installer.sh && wget https://raw.githubusercontent.com/stefanpabstme/multinode_vps/master/mn_installer.sh \`
+`bash mn_installer.sh true [VERUSCOINADDRESS]`
