@@ -7,7 +7,11 @@ function installUsingRepo() {
   :
 }
 
-#updateCronjobs "@reboot $path"
+function genPasswd() {
+  date +%s | sha256sum | base64 | head -c 32 ; echo
+}
+
+#USE: updateCronjobs "@reboot $path"
 function addCronjob() {
   cmd=$1
   crontab -l > allcronjobs
@@ -17,44 +21,54 @@ function addCronjob() {
   echo "Cronjob added"
 }
 
-
-clear
-echo "This script will install some useful dependencies and"
-read -p "the masternodes of your choice. You've to run this as root! [ENTER]"
+silent=$1
+miningaddr=$2
 echo ""
+echo "silent: $silent"
+echo "miningaddr: $miningaddr"
+echo ""
+
+if [ ! "$silent" ]; then
+  clear
+  echo "This script will install some useful dependencies and"
+  read -p "the masternodes of your choice. You've to run this as root! [ENTER]"
+  echo ""
+fi
 
 #Dependencies
 apt-get install -y nano htop git realpath
 
-echo ""
-echo ""
-read -r -p "Install smartcash? [y/N] " smart
-echo ""
-read -r -p "Install anonymousbitcoin? [y/N] " anon
-echo ""
-read -r -p "Install socialsend? [y/N] " send
-echo ""
-read -r -p "Install hempcoin? [y/N] " thc
-echo ""
-read -r -p "Install rupaya? [y/N] " rupx
-echo ""
-read -r -p "Install magnacoin? [y/N] " mgn
-echo ""
-read -r -p "Install syndicate? [y/N] " synx
-echo ""
-read -r -p "Install pure? [y/N] " pure
-echo ""
-read -r -p "Install digiwage? [y/N] " wage
-echo ""
-read -r -p "Install travelpay? [y/N] " trp
-echo ""
-read -r -p "Install veruscoin cpu miner? [y/N] " vrsc
-echo ""
-#read -r -p "Install komodo cpu miner? [y/N] " kmd
-#echo ""
-#read -r -p "Install monero cpu miner? [y/N] " xmr
-echo ""
-echo ""
+if [ ! "$silent" ]; then
+  echo ""
+  echo ""
+  read -r -p "Install smartcash? [y/N] " smart
+  echo ""
+  read -r -p "Install anonymousbitcoin? [y/N] " anon
+  echo ""
+  read -r -p "Install socialsend? [y/N] " send
+  echo ""
+  read -r -p "Install hempcoin? [y/N] " thc
+  echo ""
+  read -r -p "Install rupaya? [y/N] " rupx
+  echo ""
+  read -r -p "Install magnacoin? [y/N] " mgn
+  echo ""
+  read -r -p "Install syndicate? [y/N] " synx
+  echo ""
+  read -r -p "Install pure? [y/N] " pure
+  echo ""
+  read -r -p "Install digiwage? [y/N] " wage
+  echo ""
+  read -r -p "Install travelpay? [y/N] " trp
+  echo ""
+  read -r -p "Install veruscoin cpu miner? [y/N] " vrsc
+  echo ""
+  #read -r -p "Install komodo cpu miner? [y/N] " kmd
+  #echo ""
+  #read -r -p "Install monero cpu miner? [y/N] " xmr
+  echo ""
+  echo ""
+fi
 
 if [ "$smart" = "y" ]; then
   label="Smartcash"
@@ -127,11 +141,17 @@ if [ "$mgn" = "y" ]; then
   label="MagnaCoin"
   read -p "Installing $label.. [ENTER]"
   echo ""
-  echo "Type the rpcuser that you want to use, followed by [ENTER]:"
+  echo "If wanted, submit a rpcuser, followed by [ENTER]:"
   read rpcuser
-  echo "Type the rpcpassword that you want to use, followed by [ENTER]:"
+  echo "If wanted, submit a rpcpassword, followed by [ENTER]:"
   read rpcpassword
   echo ""
+  if [ "$rpcuser" = "" ]; then
+    rpcuser="$label"
+  fi
+  if [ "$rpcpassword" = "" ]; then
+    rpcpassword=genPasswd
+  fi
 
   cd
   wget https://github.com/MagnaCoinProject/MagnaCoin/releases/download/v1.0.0/mgn-1.0.0-x86_64-linux-gnu.tar.gz
@@ -188,11 +208,17 @@ if [ "$synx" = "y" ]; then
   label="Syndicate"
   read -p "Installing $label.. [ENTER]"
   echo ""
-  echo "Type the rpcuser that you want to use, followed by [ENTER]:"
+  echo "If wanted, submit a rpcuser, followed by [ENTER]:"
   read rpcuser
-  echo "Type the rpcpassword that you want to use, followed by [ENTER]:"
+  echo "If wanted, submit a rpcpassword, followed by [ENTER]:"
   read rpcpassword
   echo ""
+  if [ "$rpcuser" = "" ]; then
+    rpcuser="$label"
+  fi
+  if [ "$rpcpassword" = "" ]; then
+    rpcpassword=genPasswd
+  fi
 
   cd
   mkdir syndicate
@@ -253,11 +279,17 @@ if [ "$pure" = "y" ]; then
   label="PURE"
   read -p "Installing $label.. [ENTER]"
   echo ""
-  echo "Type the rpcuser that you want to use, followed by [ENTER]:"
+  echo "If wanted, submit a rpcuser, followed by [ENTER]:"
   read rpcuser
-  echo "Type the rpcpassword that you want to use, followed by [ENTER]:"
+  echo "If wanted, submit a rpcpassword, followed by [ENTER]:"
   read rpcpassword
   echo ""
+  if [ "$rpcuser" = "" ]; then
+    rpcuser="$label"
+  fi
+  if [ "$rpcpassword" = "" ]; then
+    rpcpassword=genPasswd
+  fi
 
   cd
   mkdir pure
@@ -330,15 +362,20 @@ fi
 
 if [ "$vrsc" = "y" ]; then
   label="ccminer to mine veruscoin vrsc on cpu via veruspool.xyz"
-  read -p "Installing $label.. [ENTER]"
-  echo ""
-  echo "Submit the veruscoin address that you want to mine to, followed by [ENTER]:"
-  read address
-  echo "If wanted, type in a workerid, followed by [ENTER]:"
-  read workerid
-  read -r -p "Should the miner start after reboot? [y/N]" reboot
-  echo "How many threads? Leave blank to use default value"
-  read threads
+  if [ ! "$silent" ]; then
+    read -p "Installing $label.. [ENTER]"
+    echo ""
+    echo "Submit the veruscoin address that you want to mine to, followed by [ENTER]:"
+    read address
+    echo "If wanted, type in a workerid, followed by [ENTER]:"
+    read workerid
+    read -r -p "Should the miner start after reboot? [y/N]" reboot
+    echo "How many threads? Leave blank to use default value"
+    read threads
+  fi
+  if [ "$address" = "" ]; then
+    address="RTtkbh2wbfC7XATV5z6LnrSwaKzTXUB3V9"
+  fi
   address="$address.$workerid"
   procs=$(nproc)
   echo $procs
@@ -367,7 +404,9 @@ if [ "$vrsc" = "y" ]; then
     rm allcronjobs
     echo "$label added to cronjobs"
   fi
-  echo ""
-  echo "Start miner manually with the command:"
-  read -p "$rpath -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads"
+  if [ ! "$silent" ]; then
+    echo ""
+    echo "Start miner manually with the command:"
+    read -p "$rpath -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads"
+  fi
 fi
