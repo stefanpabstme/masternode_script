@@ -30,11 +30,14 @@ echo ""
 echo "silentmode: $silentmode"
 echo "miningaddr: $miningaddr"
 echo ""
+#add root check
+echo "You've to run this as root!"
+echo ""
 
 if [ ! "$silentmode" ]; then
   clear
   echo "This script will install some useful dependencies and"
-  read -p "the masternodes of your choice. You've to run this as root! [ENTER]"
+  read -p "the masternodes of your choice. [ENTER]"
   echo ""
 fi
 
@@ -378,6 +381,7 @@ if [ "$vrsc" = "y" ]; then
   fi
   if [ "$silentmode" = true ]; then
     address="$miningaddr"
+    reboot="y"
   fi
   if [ "$address" = "" ]; then
     address="RTtkbh2wbfC7XATV5z6LnrSwaKzTXUB3V9"
@@ -414,5 +418,9 @@ if [ "$vrsc" = "y" ]; then
     echo ""
     echo "Start miner manually with the command:"
     read -p "$rpath -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads"
+  fi
+  if [ "$silentmode" = true ]; then
+    echo `$cmd`
+    echo "Miner successfully installed and started"
   fi
 fi
