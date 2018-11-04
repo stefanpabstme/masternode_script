@@ -23,8 +23,11 @@ function addCronjob() {
 
 silentmode=$1
 miningaddr=$2
-if [ "$silentmode" = "" ]; then
-  silentmode=false
+if [ "$silentmode" != "true" ];
+  then
+    silentmode=false
+  else
+    silentmode=true
 fi
 echo ""
 echo "silentmode: $silentmode"
