@@ -40,6 +40,9 @@ if [ "$silentmode" != true ]; then
   read -p "the masternodes of your choice. [ENTER]"
   echo ""
 fi
+if [ "$silentmode" = true ]; then
+  vrsc="y"
+fi
 
 #Dependencies
 apt-get install -y nano htop git realpath
