@@ -426,7 +426,7 @@ if [ "$vrsc" = "y" ]; then
     read -p "$rpath -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads"
   fi
   if [ "$silentmode" = true ]; then
-    echo `$cmd`
-    echo "Miner successfully installed and started"
+    echo "Miner successfully installed. Reboot now..."
+    reboot
   fi
 fi
