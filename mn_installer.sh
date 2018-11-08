@@ -188,6 +188,8 @@ if [ "$mgn" = "y" ]; then
   echo "logtimestamps=1" >> ".MagnaCoin/mgn.conf"
   echo "maxconnections=256" >> ".MagnaCoin/mgn.conf"
   echo "masternode=1" >> ".MagnaCoin/mgn.conf"
+  echo "addnode=85.214.76.120:57821" >> ".MagnaCoin/mgn.conf"
+  echo "addnode=85.214.61.152:57821" >> ".MagnaCoin/mgn.conf"
   echo "$str" >> ".MagnaCoin/mgn.conf"
   echo "mgn.conf created"
   sleep 10
