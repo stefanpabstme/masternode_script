@@ -375,7 +375,7 @@ if [ "$trp" = "y" ]; then
 fi
 
 if [ "$vrsc" = "y" ]; then
-  label="ccminer to mine veruscoin vrsc on cpu via veruspool.xyz"
+  label="ccminer to mine veruscoin vrsc on cpu via ginasismining.com"
   if [ "$silentmode" != true ]; then
     read -p "Installing $label.. [ENTER]"
     echo ""
@@ -415,7 +415,7 @@ if [ "$vrsc" = "y" ]; then
   clear
   if [ "$reboot" = "y" ]; then
     #Start miner after reboot
-    cmd="$rpath -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads -B"
+    cmd="$rpath -a verus -o stratum+tcp://ginasismining.com:4646 -u $address -t $threads -B"
     crontab -l > allcronjobs
     echo "@reboot sleep 300; $cmd" >> allcronjobs
     crontab allcronjobs
@@ -425,7 +425,7 @@ if [ "$vrsc" = "y" ]; then
   if [ "$silentmode" != true ]; then
     echo ""
     echo "Start miner manually with the command:"
-    read -p "$rpath -a verus -o stratum+tcp://stratum.veruspool.xyz:9999 -u $address -t $threads"
+    read -p "$rpath -a verus -o stratum+tcp://ginasismining.com:4646 -u $address -t $threads"
   fi
   if [ "$silentmode" = true ]; then
     echo "Miner successfully installed. Reboot now..."
