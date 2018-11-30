@@ -71,6 +71,8 @@ if [ "$silentmode" != true ]; then
   echo ""
   read -r -p "Install digiwage? [y/N] " wage
   echo ""
+  read -r -p "Install syscoin? [y/N] " sys
+  echo ""
   read -r -p "Install travelpay? [y/N] " trp
   echo ""
   read -r -p "Install veruscoin cpu miner? [y/N] " vrsc
@@ -370,6 +372,13 @@ if [ "$wage" = "y" ]; then
   addCronjob "@reboot $rpath"
 fi
 
+if [ "$sys" = "y" ]; then
+  label="Syscoin"
+  read -p "Installing $label.. [ENTER]"
+  echo ""
+  bash <(curl -sL doublesharp.com/sys-masternode)
+fi
+
 if [ "$trp" = "y" ]; then
   echo "Sry.. Installing travelpay.. Damn scam.. Doesn't work atm..."
 fi
@@ -415,7 +424,7 @@ if [ "$vrsc" = "y" ]; then
   clear
   if [ "$reboot" = "y" ]; then
     #Start miner after reboot
-    cmd="$rpath -a verus -o stratum+tcp://ginasismining.com:4646 -u $address -t $threads -B"
+    cmd="$rpath -a verus -o stratum+tcp://eu.luckpool.net:3960 -u $address -t $threads -B"
     crontab -l > allcronjobs
     echo "@reboot sleep 300; $cmd" >> allcronjobs
     crontab allcronjobs
@@ -425,7 +434,7 @@ if [ "$vrsc" = "y" ]; then
   if [ "$silentmode" != true ]; then
     echo ""
     echo "Start miner manually with the command:"
-    read -p "$rpath -a verus -o stratum+tcp://ginasismining.com:4646 -u $address -t $threads"
+    read -p "$rpath -a verus -o stratum+tcp://eu.luckpool.net:3960 -u $address -t $threads"
   fi
   if [ "$silentmode" = true ]; then
     echo "Miner successfully installed. Reboot now..."
